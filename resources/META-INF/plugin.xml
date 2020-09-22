@@ -1,0 +1,36 @@
+<idea-plugin>
+  <id>happy-git-commit</id>
+  <name>Happy Git Commit</name>
+  <version>1.0.0.1</version>
+  <vendor email="yijie4188@gamil.com"/>
+
+  <description><![CDATA[
+      <p>Create a commit message with the following template:</p>
+        <pre>
+        &lt;type&gt;(&lt;scope&gt;): &lt;subject&gt;
+        &lt;BLANK LINE&gt;
+        &lt;body&gt;
+        &lt;BLANK LINE&gt;
+        &lt;footer&gt;
+        </pre>
+    ]]></description>
+
+  <idea-version since-build="173.0"/>
+
+  <depends>com.intellij.modules.platform</depends>
+
+  <extensions defaultExtensionNs="com.intellij">
+    <!-- Add your extensions here -->
+  </extensions>
+
+  <actions>
+    <!-- Add your actions here -->
+    <action id="show-commit-template-dialog" class="happy.git.commit.action.CreateCommitTemplateAction"
+            text="CommitTemplateDialog"
+            description="show a commit template dialog"
+            icon="PluginIcons.OPEN_DIALOG">
+      <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+    </action>
+  </actions>
+
+</idea-plugin>
