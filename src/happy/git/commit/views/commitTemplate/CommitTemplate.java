@@ -1,10 +1,11 @@
 package happy.git.commit.views.commitTemplate;
 
+import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.vfs.VfsUtil;
+import happy.git.commit.entity.CommitTemplateJson;
+import happy.git.commit.tool.FileTool;
 
 import javax.swing.*;
-import java.io.File;
 
 /**
  * @desc    提交模板面板 CommitTemplate.java
@@ -51,7 +52,9 @@ public class CommitTemplate {
         for (DefaultChange type : DefaultChange.values()) {
             changeType.addItem(type);
         }
-        File workingDirectory = VfsUtil.virtualToIoFile(project.getBaseDir());
+        FileTool.setP(project);
+        CommitTemplateJson CommitTemplateJson = new Gson().fromJson(FileTool.getCommitTemplateFileContent(), CommitTemplateJson.class);
+        System.out.println(CommitTemplateJson.toString());
     }
 
     public JPanel getMainPanel() {

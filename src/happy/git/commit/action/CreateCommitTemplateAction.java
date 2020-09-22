@@ -7,6 +7,7 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.ui.Refreshable;
 import happy.git.commit.dialog.CommitTemplateDialog;
+import happy.git.commit.tool.FileTool;
 import org.jetbrains.annotations.Nullable;
 
 public class CreateCommitTemplateAction extends AnAction {
