@@ -1,7 +1,7 @@
 <idea-plugin>
   <id>happy-commit</id>
   <name>Happy Commit</name>
-  <version>1.0.1.0</version>
+  <version>1.0.2.0</version>
   <vendor email="yijie4188@gamil.com"/>
 
   <description><![CDATA[
