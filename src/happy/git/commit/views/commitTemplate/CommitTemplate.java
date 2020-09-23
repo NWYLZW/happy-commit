@@ -1,8 +1,9 @@
 package happy.git.commit.views.commitTemplate;
 
-import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
 import happy.git.commit.entity.CommitTemplateJson;
+import happy.git.commit.entity.Scope;
+import happy.git.commit.entity.Type;
 import happy.git.commit.tool.FileTool;
 
 import javax.swing.*;
@@ -19,44 +20,29 @@ public class CommitTemplate {
     private JComboBox changeScope;
     private JTextField shortDescription;
     private JTextArea longDescription;
-    private JTextField closedIssues;
-    private JTextArea breakingChanges;
-    enum DefaultChange {
-        FEAT("Features", "A new feature"),
-        FIX("Bug Fixes", "A bug fix"),
-        DOCS("Documentation", "Documentation only changes"),
-        STYLE("Styles", "Changes that do not affect the meaning of the code (white-space, formatting, missing semi-colons, etc)"),
-        REFACTOR("Code Refactoring", "A code change that neither fixes a bug nor adds a feature"),
-        PERF("Performance Improvements", "A code change that improves performance"),
-        TEST("Tests", "Adding missing tests or correcting existing tests"),
-        BUILD("Builds", "Changes that affect the build system or external dependencies (example scopes: gulp, broccoli, npm)"),
-        CI("Continuous Integrations", "Changes to our CI configuration files and scripts (example scopes: Travis, Circle, BrowserStack, SauceLabs)"),
-        CHORE("Chores", "Other changes that don't modify src or test files"),
-        REVERT("Reverts", "Reverts a previous commit");
-        public final String title;
-        public final String description;
-        DefaultChange(String title, String description) {
-            this.title = title;
-            this.description = description;
-        }
-        public String label() {
-            return this.name().toLowerCase();
-        }
-        @Override
-        public String toString() {
-            return String.format("%s - %s", this.label(), this.description);
-        }
-    }
+
+    CommitTemplateJson commitTemplateJson = FileTool.getCommitTemplateJson();
 
     public CommitTemplate(Project project) {
-        for (DefaultChange type : DefaultChange.values()) {
+        FileTool.setP(project);
+        for (Type type : commitTemplateJson.getTypes()) {
             changeType.addItem(type);
         }
-        FileTool.setP(project);
-        CommitTemplateJson CommitTemplateJson = new Gson().fromJson(FileTool.getCommitTemplateFileContent(), CommitTemplateJson.class);
-        System.out.println(CommitTemplateJson.toString());
+        for (Scope scope : commitTemplateJson.getScopes()) {
+            changeScope.addItem(scope);
+        }
     }
 
+    /**
+     * 获取提交信息
+     */
+    public String getCommitMessage () {
+        String.format(
+                commitTemplateJson.getCiTemplate(),
+                changeScope.getInputContext()
+        );
+        return "测试";
+    }
     public JPanel getMainPanel() {
         return mainPanel;
     }

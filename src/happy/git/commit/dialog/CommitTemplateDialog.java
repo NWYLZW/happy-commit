@@ -14,9 +14,12 @@ public class CommitTemplateDialog extends DialogWrapper {
     public CommitTemplateDialog(@Nullable Project project) {
         super(project);
         panel = new CommitTemplate(project);
-        setTitle("Commit");
+        setTitle("Commit Template Sel");
         setOKButtonText("OK");
         init();
+    }
+    public String message () {
+        return panel.getCommitMessage();
     }
 
     @Nullable

@@ -1,7 +1,9 @@
 package happy.git.commit.tool;
 
+import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.vfs.VfsUtil;
+import happy.git.commit.entity.CommitTemplateJson;
 
 import java.io.*;
 
@@ -20,10 +22,17 @@ public class FileTool {
         FileTool.p = p;
     }
 
+    /**
+     * 判断是否有提交模板文件
+     */
     public static boolean haveCommitTemplateFile () {
         return commitTemplateFile() == null;
     }
-    public static File commitTemplateFile () {
+
+    /**
+     * 获取提交模板文件对象
+     */
+    private static File commitTemplateFile () {
         File[] commitTemplates =
                 VfsUtil.virtualToIoFile( p.getBaseDir() )
                         .listFiles( (dir, name) -> name.equals(".commit-template.json") );
@@ -33,7 +42,11 @@ public class FileTool {
         }
         return null;
     }
-    public static String getCommitTemplateFileContent () {
+
+    /**
+     * 获取提交模板文件内容
+     */
+    private static String getCommitTemplateFileContent () {
         File commitTemplateFile = commitTemplateFile();
         if (commitTemplateFile == null) {
             return null;
@@ -56,5 +69,14 @@ public class FileTool {
             e.printStackTrace();
             return null;
         }
+    }
+
+    /**
+     * 获取CommitTemplateJson实体对象
+     */
+    public static CommitTemplateJson getCommitTemplateJson () {
+        String jsonStr = getCommitTemplateFileContent();
+        if (jsonStr == null) return null;
+        return new Gson().fromJson(jsonStr, CommitTemplateJson.class);
     }
 }

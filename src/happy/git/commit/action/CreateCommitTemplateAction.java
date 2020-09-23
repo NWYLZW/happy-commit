@@ -7,7 +7,6 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.ui.Refreshable;
 import happy.git.commit.dialog.CommitTemplateDialog;
-import happy.git.commit.tool.FileTool;
 import org.jetbrains.annotations.Nullable;
 
 public class CreateCommitTemplateAction extends AnAction {
@@ -19,10 +18,14 @@ public class CreateCommitTemplateAction extends AnAction {
         CommitTemplateDialog dialog = new CommitTemplateDialog(actionEvent.getProject());
         dialog.show();
         if (dialog.getExitCode() == DialogWrapper.OK_EXIT_CODE) {
-            commitPanel.setCommitMessage("123");
+            commitPanel.setCommitMessage(dialog.message());
         }
     }
 
+    /**
+     * 获取提交面板
+     * @param e AnActionEvent 当前Action事件对象
+     */
     private static CommitMessageI getCommitPanel(@Nullable AnActionEvent e) {
         if (e == null) {
             return null;
