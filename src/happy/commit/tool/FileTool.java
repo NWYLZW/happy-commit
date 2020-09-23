@@ -16,28 +16,61 @@ import java.io.*;
  */
 public class FileTool {
     private static final Project PROJECT = ProjectManager.getInstance().getOpenProjects()[0];
+    /**
+     * 读取模板文件中的字符内容
+     * @param fileName 模板文件名
+     */
+    private static String readTemplateFile(String fileName) {
+        String content = "";
+        try {
+            InputStream in = FileTool.class.getClassLoader()
+                    .getResource(fileName).openStream();
+            content = StreamTool.inputStream2String(in);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return content;
+    }
+    /**
+     * 生成文件
+     * @param content   中的内容
+     * @param path      文件路径
+     * @param fileName  文件名称
+     */
+    private static void writeToFile(String content, String path, String fileName) {
+        try {
+            File folder = new File(path);
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+            File file = new File(path + '/' + fileName);
+            if (file.exists()) {
+                file.delete();
+            }
+            file.createNewFile();
+            BufferedWriter bw = new BufferedWriter(
+                    new OutputStreamWriter(
+                            new FileOutputStream(file.getAbsoluteFile(),true
+                            ),"UTF-8"
+                    )
+            );
+            bw.write(content);
+            bw.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 
+    /**
+     * 初始化一个默认的提交模板文件
+     */
     public static boolean initCommitTemplateJson () {
-        CommitTemplateJson newCommitTemplateJson = new Gson().fromJson(
-                "{\n" +
-                        "  \"ci-template\": \"[${type}] (${scope}) ${desc}\\n\\n${long-desc}\",\n" +
-                        "  \"types\": [{\n" +
-                        "    \"name\": \"feat\",\n" +
-                        "    \"title\": \"features\",\n" +
-                        "    \"desc\": \"添加新功能\"\n" +
-                        "  },{\n" +
-                        "    \"name\": \"fix\",\n" +
-                        "    \"title\": \"fix bug\",\n" +
-                        "    \"desc\": \"修复bug\"\n" +
-                        "  }],\n" +
-                        "  \"scopes\": [{\n" +
-                        "    \"name\": \"controller\",\n" +
-                        "    \"title\": \"controller\",\n" +
-                        "    \"desc\": \"控制层被修改时使用\"\n" +
-                        "  }]\n" +
-                        "}\n",
-                CommitTemplateJson.class);
-        System.out.println(newCommitTemplateJson);
+        String fileContent = readTemplateFile("template/.commit-template.json");
+        writeToFile(
+                fileContent,
+                VfsUtil.virtualToIoFile( PROJECT.getBaseDir() ).getPath(),
+                ".commit-template.json"
+        );
         return true;
     }
 
@@ -72,18 +105,9 @@ public class FileTool {
         }
 
         try {
-            BufferedReader bReader = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(commitTemplateFile),"UTF-8"
-                    )
-            );
-            StringBuilder sb = new StringBuilder();
-            String s = "";
-            while ((s = bReader.readLine()) != null) {
-                sb.append(s);
-            }
-            bReader.close();
-            return sb.toString().replace(" ", "");
+            return StreamTool.inputStream2String(
+                    new FileInputStream(commitTemplateFile)
+            ).replace(" ", "");
         } catch (IOException e) {
             e.printStackTrace();
             return null;

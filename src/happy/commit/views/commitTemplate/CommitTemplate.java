@@ -31,16 +31,35 @@ public class CommitTemplate {
                     NotificationDisplayType.BALLOON, true);
 
     CommitTemplateJson commitTemplateJson;
+    private final Project PROJECT;
 
     public CommitTemplate(Project project) {
-        commitTemplateJson = FileTool.getCommitTemplateJson();
-        for (Type type : commitTemplateJson.getTypes()) {
-            changeType.addItem(type);
-        }
-        for (Scope scope : commitTemplateJson.getScopes()) {
-            changeScope.addItem(scope);
-        }
+        PROJECT = project;
+        reloadData();
+        initEvent();
+    }
 
+    /**
+     * 重载数据
+     */
+    private void reloadData() {
+        commitTemplateJson = FileTool.getCommitTemplateJson();
+        if (commitTemplateJson != null) {
+            changeType.removeAllItems();
+            changeScope.removeAllItems();
+            for (Type type : commitTemplateJson.getTypes()) {
+                changeType.addItem(type);
+            }
+            for (Scope scope : commitTemplateJson.getScopes()) {
+                changeScope.addItem(scope);
+            }
+        }
+    }
+
+    /**
+     * 初始化事件
+     */
+    private void initEvent () {
         initButton.addActionListener(e -> {
             if (FileTool.haveCommitTemplateFile()) {
                 // 返回值为1的时候 点击了取消按钮
@@ -53,15 +72,16 @@ public class CommitTemplate {
             }
             String msg; MessageType type;
             if (FileTool.initCommitTemplateJson()) {
-                msg = "文件初始化成功";
+                msg = "提交模板文件初始化成功";
                 type = MessageType.INFO;
             } else {
-                msg = "文件初始化失败";
+                msg = "提交模板文件初始化失败";
                 type = MessageType.ERROR;
             }
             Notifications.Bus.notify(
-                NOTIFICATION_GROUP.createNotification(msg, type), project
+                    NOTIFICATION_GROUP.createNotification(msg, type), PROJECT
             );
+            reloadData();
         });
     }
 
