@@ -1,4 +1,4 @@
-package happy.git.commit.entity;
+package happy.commit.entity;
 /**
  * @desc    命名域 Scope.java
  * @author  yijie

@@ -1,9 +1,10 @@
-package happy.git.commit.tool;
+package happy.commit.tool;
 
 import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VfsUtil;
-import happy.git.commit.entity.CommitTemplateJson;
+import happy.commit.entity.CommitTemplateJson;
 
 import java.io.*;
 
@@ -14,19 +15,37 @@ import java.io.*;
  * @logs[0] 2020-09-22 20:59 yijie 创建了FileTool.java文件
  */
 public class FileTool {
-    private static Project p;
-    public static Project getP() {
-        return p;
-    }
-    public static void setP(Project p) {
-        FileTool.p = p;
+    private static final Project PROJECT = ProjectManager.getInstance().getOpenProjects()[0];
+
+    public static boolean initCommitTemplateJson () {
+        CommitTemplateJson newCommitTemplateJson = new Gson().fromJson(
+                "{\n" +
+                        "  \"ci-template\": \"[${type}] (${scope}) ${desc}\\n\\n${long-desc}\",\n" +
+                        "  \"types\": [{\n" +
+                        "    \"name\": \"feat\",\n" +
+                        "    \"title\": \"features\",\n" +
+                        "    \"desc\": \"添加新功能\"\n" +
+                        "  },{\n" +
+                        "    \"name\": \"fix\",\n" +
+                        "    \"title\": \"fix bug\",\n" +
+                        "    \"desc\": \"修复bug\"\n" +
+                        "  }],\n" +
+                        "  \"scopes\": [{\n" +
+                        "    \"name\": \"controller\",\n" +
+                        "    \"title\": \"controller\",\n" +
+                        "    \"desc\": \"控制层被修改时使用\"\n" +
+                        "  }]\n" +
+                        "}\n",
+                CommitTemplateJson.class);
+        System.out.println(newCommitTemplateJson);
+        return true;
     }
 
     /**
      * 判断是否有提交模板文件
      */
     public static boolean haveCommitTemplateFile () {
-        return commitTemplateFile() == null;
+        return commitTemplateFile() != null;
     }
 
     /**
@@ -34,7 +53,7 @@ public class FileTool {
      */
     private static File commitTemplateFile () {
         File[] commitTemplates =
-                VfsUtil.virtualToIoFile( p.getBaseDir() )
+                VfsUtil.virtualToIoFile( PROJECT.getBaseDir() )
                         .listFiles( (dir, name) -> name.equals(".commit-template.json") );
         if ( commitTemplates.length == 1
                 && commitTemplates[0].isFile()) {

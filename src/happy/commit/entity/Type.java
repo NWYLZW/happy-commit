@@ -1,4 +1,4 @@
-package happy.git.commit.entity;
+package happy.commit.entity;
 /**
  * @desc    提交类型 Type.java
  * @author  yijie

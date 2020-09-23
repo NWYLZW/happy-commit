@@ -1,0 +1,17 @@
+{
+  "ci-template": "[${type}] (${scope}) ${desc}\n\n${long-desc}",
+  "types": [{
+    "name": "feat",
+    "title": "features",
+    "desc": "添加新功能"
+  },{
+    "name": "fix",
+    "title": "fix bug",
+    "desc": "修复bug"
+  }],
+  "scopes": [{
+    "name": "controller",
+    "title": "controller",
+    "desc": "控制层被修改时使用"
+  }]
+}

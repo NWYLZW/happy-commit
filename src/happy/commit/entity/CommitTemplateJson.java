@@ -1,4 +1,4 @@
-package happy.git.commit.entity;
+package happy.commit.entity;
 
 import com.google.gson.annotations.SerializedName;
 

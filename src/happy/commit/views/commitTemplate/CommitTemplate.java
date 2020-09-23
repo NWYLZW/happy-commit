@@ -1,10 +1,14 @@
-package happy.git.commit.views.commitTemplate;
+package happy.commit.views.commitTemplate;
 
+import com.intellij.notification.NotificationDisplayType;
+import com.intellij.notification.NotificationGroup;
+import com.intellij.notification.Notifications;
 import com.intellij.openapi.project.Project;
-import happy.git.commit.entity.CommitTemplateJson;
-import happy.git.commit.entity.Scope;
-import happy.git.commit.entity.Type;
-import happy.git.commit.tool.FileTool;
+import com.intellij.openapi.ui.MessageType;
+import happy.commit.entity.CommitTemplateJson;
+import happy.commit.entity.Scope;
+import happy.commit.entity.Type;
+import happy.commit.tool.FileTool;
 
 import javax.swing.*;
 
@@ -20,11 +24,15 @@ public class CommitTemplate {
     private JComboBox changeScope;
     private JTextField description;
     private JTextArea longDescription;
+    private JButton initButton;
+
+    public static final NotificationGroup NOTIFICATION_GROUP =
+            new NotificationGroup("Happy git commit notification group",
+                    NotificationDisplayType.BALLOON, true);
 
     CommitTemplateJson commitTemplateJson;
 
     public CommitTemplate(Project project) {
-        FileTool.setP(project);
         commitTemplateJson = FileTool.getCommitTemplateJson();
         for (Type type : commitTemplateJson.getTypes()) {
             changeType.addItem(type);
@@ -32,6 +40,29 @@ public class CommitTemplate {
         for (Scope scope : commitTemplateJson.getScopes()) {
             changeScope.addItem(scope);
         }
+
+        initButton.addActionListener(e -> {
+            if (FileTool.haveCommitTemplateFile()) {
+                // 返回值为1的时候 点击了取消按钮
+                if (JOptionPane.showConfirmDialog(
+                        null,
+                        "项目下已有该文件是否删除重建", "请确认",
+                        JOptionPane.YES_NO_OPTION)==1) {
+                    return;
+                }
+            }
+            String msg; MessageType type;
+            if (FileTool.initCommitTemplateJson()) {
+                msg = "文件初始化成功";
+                type = MessageType.INFO;
+            } else {
+                msg = "文件初始化失败";
+                type = MessageType.ERROR;
+            }
+            Notifications.Bus.notify(
+                NOTIFICATION_GROUP.createNotification(msg, type), project
+            );
+        });
     }
 
     /**

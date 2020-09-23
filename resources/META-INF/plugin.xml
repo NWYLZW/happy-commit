@@ -1,6 +1,6 @@
 <idea-plugin>
-  <id>happy-git-commit</id>
-  <name>Happy Git Commit</name>
+  <id>happy-commit</id>
+  <name>Happy Commit</name>
   <version>1.0.1.0</version>
   <vendor email="yijie4188@gamil.com"/>
 
@@ -28,11 +28,13 @@
 
   <actions>
     <!-- Add your actions here -->
-    <action id="show-commit-template-dialog" class="happy.git.commit.action.CreateCommitTemplateAction"
+    <action id="show-commit-template-dialog" class="happy.commit.action.CreateCommitTemplateAction"
             text="CommitTemplateDialog"
             description="Show a commit template dialog"
             icon="PluginIcons.TEMPLATE">
-      <add-to-group group-id="Vcs.MessageActionGroup" anchor="first"/>
+      <add-to-group
+              anchor="last"
+              group-id="Vcs.MessageActionGroup"/>
     </action>
   </actions>
 

@@ -1,4 +1,4 @@
-package happy.git.commit.action;
+package happy.commit.action;
 
 import com.intellij.openapi.ui.DialogWrapper;
 import com.intellij.openapi.vcs.CommitMessageI;
@@ -6,7 +6,7 @@ import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.ui.Refreshable;
-import happy.git.commit.dialog.CommitTemplateDialog;
+import happy.commit.dialog.CommitTemplateDialog;
 import org.jetbrains.annotations.Nullable;
 
 public class CreateCommitTemplateAction extends AnAction {

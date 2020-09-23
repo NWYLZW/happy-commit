@@ -1,8 +1,8 @@
-package happy.git.commit.dialog;
+package happy.commit.dialog;
 
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.DialogWrapper;
-import happy.git.commit.views.commitTemplate.CommitTemplate;
+import happy.commit.views.commitTemplate.CommitTemplate;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;

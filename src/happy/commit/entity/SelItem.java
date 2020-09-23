@@ -1,4 +1,4 @@
-package happy.git.commit.entity;
+package happy.commit.entity;
 /**
  * @desc    下拉选择框 SelItem.java
  * @author  yijie
