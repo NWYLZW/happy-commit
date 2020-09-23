@@ -18,13 +18,14 @@ public class CommitTemplate {
     private JPanel mainPanel;
     private JComboBox changeType;
     private JComboBox changeScope;
-    private JTextField shortDescription;
+    private JTextField description;
     private JTextArea longDescription;
 
-    CommitTemplateJson commitTemplateJson = FileTool.getCommitTemplateJson();
+    CommitTemplateJson commitTemplateJson;
 
     public CommitTemplate(Project project) {
         FileTool.setP(project);
+        commitTemplateJson = FileTool.getCommitTemplateJson();
         for (Type type : commitTemplateJson.getTypes()) {
             changeType.addItem(type);
         }
@@ -37,11 +38,17 @@ public class CommitTemplate {
      * 获取提交信息
      */
     public String getCommitMessage () {
-        String.format(
-                commitTemplateJson.getCiTemplate(),
-                changeScope.getInputContext()
-        );
-        return "测试";
+        String
+                ciTemplate = commitTemplateJson.getCiTemplate(),
+                type = ((Type) changeType.getSelectedItem()).getName(),
+                scope = ((Scope) changeScope.getSelectedItem()).getName(),
+                desc = description.getText().trim(),
+                longDesc = longDescription.getText().trim();
+        return ciTemplate
+                .replace("${type}", type)
+                .replace("${scope}", scope)
+                .replace("${desc}", desc)
+                .replace("${long-desc}", longDesc);
     }
     public JPanel getMainPanel() {
         return mainPanel;

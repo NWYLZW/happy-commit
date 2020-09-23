@@ -16,9 +16,9 @@ public class SelItem {
     @Override
     public String toString() {
         if (this.desc!=null) {
-            return String.format("%s [%s]", this.name, this.desc);
+            return String.format("%s [%s]", this.title, this.desc);
         } else {
-            return String.format("%s", this.name);
+            return String.format("%s", this.title);
         }
     }
 
