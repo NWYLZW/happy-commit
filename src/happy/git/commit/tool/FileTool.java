@@ -40,8 +40,11 @@ public class FileTool {
         }
 
         try {
-            FileReader reader = new FileReader(commitTemplateFile);
-            BufferedReader bReader = new BufferedReader(reader);
+            BufferedReader bReader = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream(commitTemplateFile),"UTF-8"
+                    )
+            );
             StringBuilder sb = new StringBuilder();
             String s = "";
             while ((s = bReader.readLine()) != null) {
