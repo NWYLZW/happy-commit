@@ -2,7 +2,6 @@ package happy.commit.tool;
 
 import com.google.gson.Gson;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.project.ProjectManager;
 import com.intellij.openapi.vfs.VfsUtil;
 import happy.commit.entity.CommitTemplateJson;
 
@@ -15,7 +14,11 @@ import java.io.*;
  * @logs[0] 2020-09-22 20:59 yijie 创建了FileTool.java文件
  */
 public class FileTool {
-    private static final Project PROJECT = ProjectManager.getInstance().getOpenProjects()[0];
+    private static Project project;
+    public static void setProject(Project project) {
+        FileTool.project = project;
+    }
+
     /**
      * 读取模板文件中的字符内容
      * @param fileName 模板文件名
@@ -68,7 +71,7 @@ public class FileTool {
         String fileContent = readTemplateFile("template/.commit-template.json");
         writeToFile(
                 fileContent,
-                VfsUtil.virtualToIoFile( PROJECT.getBaseDir() ).getPath(),
+                VfsUtil.virtualToIoFile( project.getBaseDir() ).getPath(),
                 ".commit-template.json"
         );
         return true;
@@ -86,7 +89,7 @@ public class FileTool {
      */
     private static File commitTemplateFile () {
         File[] commitTemplates =
-                VfsUtil.virtualToIoFile( PROJECT.getBaseDir() )
+                VfsUtil.virtualToIoFile( project.getBaseDir() )
                         .listFiles( (dir, name) -> name.equals(".commit-template.json") );
         if ( commitTemplates.length == 1
                 && commitTemplates[0].isFile()) {

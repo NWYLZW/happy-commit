@@ -11,6 +11,7 @@ import happy.commit.entity.Type;
 import happy.commit.tool.FileTool;
 
 import javax.swing.*;
+import java.util.function.Supplier;
 
 /**
  * @desc    提交模板面板 CommitTemplate.java
@@ -89,12 +90,18 @@ public class CommitTemplate {
      * 获取提交信息
      */
     public String getCommitMessage () {
-        String
-                ciTemplate = commitTemplateJson.getCiTemplate(),
-                type = ((Type) changeType.getSelectedItem()).getName(),
-                scope = ((Scope) changeScope.getSelectedItem()).getName(),
-                desc = description.getText().trim(),
-                longDesc = longDescription.getText().trim();
+        String ciTemplate = commitTemplateJson.getCiTemplate();
+        String type = ((Type) changeType.getSelectedItem()).getName();
+
+        String scope = ((Supplier<String>) () -> {
+            if (changeScope.getSelectedItem() == null) {
+                return changeScope.getInputContext().toString();
+            }
+            return ((Scope) changeScope.getSelectedItem()).getName();
+        }).get();
+
+        String desc = description.getText().trim();
+        String longDesc = longDescription.getText().trim();
         return ciTemplate
                 .replace("${type}", type)
                 .replace("${scope}", scope)

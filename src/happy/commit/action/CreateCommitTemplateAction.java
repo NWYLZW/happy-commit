@@ -7,11 +7,14 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.vcs.VcsDataKeys;
 import com.intellij.openapi.vcs.ui.Refreshable;
 import happy.commit.dialog.CommitTemplateDialog;
+import happy.commit.tool.FileTool;
 import org.jetbrains.annotations.Nullable;
 
 public class CreateCommitTemplateAction extends AnAction {
     @Override
     public void actionPerformed(AnActionEvent actionEvent) {
+        // action行为启动前初始化FileTool的project
+        FileTool.setProject(actionEvent.getProject());
         final CommitMessageI commitPanel = getCommitPanel(actionEvent);
         if (commitPanel == null)
             return;
